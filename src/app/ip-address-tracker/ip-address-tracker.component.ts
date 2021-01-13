@@ -52,13 +52,16 @@ export class IpAddressTrackerComponent implements OnInit, OnDestroy {
     this.map.remove();
   }
   searchGeolocation(): void {
-    this.geolocationService
-      .getGeolocationIp(this.ipInput)
-      .subscribe((response: GeolocationModel) => {
+    this.geolocationService.getGeolocationIp(this.ipInput).subscribe(
+      (response: GeolocationModel) => {
         this.data = response;
         this.ngOnDestroy();
         this.refrestmap();
-      });
-    alert('No se encontro la dirección IP');
+      },
+      (error) => {
+        console.log(error);
+        alert('No se encontro la dirección IP');
+      }
+    );
   }
 }
