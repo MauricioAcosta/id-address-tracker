@@ -11,7 +11,10 @@ import GeolocationModel from 'src/models/geolocation.model';
 export class IpAddressTrackerComponent implements OnInit, OnDestroy {
   map: Leaflet.Map;
   data: GeolocationModel;
-  constructor(private geolocationService: GeolocationService) {}
+  ipInput: string;
+  constructor(private geolocationService: GeolocationService) {
+    this.ipInput = '';
+  }
 
   ngOnInit(): void {
     const promise1 = new Promise((resolve) => {
@@ -23,23 +26,39 @@ export class IpAddressTrackerComponent implements OnInit, OnDestroy {
         });
     });
     Promise.all([promise1]).then((_) => {
-      console.log('this.data: ', this.data);
-
-      this.map = Leaflet.map('map').setView(
-        [this.data.location.lat, this.data.location.lng],
-        18
-      );
-      Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: 'edupala.com © Angular LeafLet',
-      }).addTo(this.map);
-
-      Leaflet.marker([this.data.location.lat, this.data.location.lng])
-        .addTo(this.map)
-        .openPopup();
+      this.refrestmap();
     });
   }
 
+  refrestmap() {
+    this.map = Leaflet.map('map').setView(
+      [this.data.location.lat, this.data.location.lng],
+      18
+    );
+    var iconDark = Leaflet.icon({
+      iconUrl: './assets/icon-location.png',
+    });
+    Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'edupala.com © Angular LeafLet',
+    }).addTo(this.map);
+
+    Leaflet.marker([this.data.location.lat, this.data.location.lng], {
+      icon: iconDark,
+    })
+      .addTo(this.map)
+      .openPopup();
+  }
   ngOnDestroy(): void {
     this.map.remove();
+  }
+  searchGeolocation(): void {
+    this.geolocationService
+      .getGeolocationIp(this.ipInput)
+      .subscribe((response: GeolocationModel) => {
+        this.data = response;
+        this.ngOnDestroy();
+        this.refrestmap();
+      });
+    alert('No se encontro la dirección IP');
   }
 }

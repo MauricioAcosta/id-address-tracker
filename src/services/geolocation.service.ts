@@ -17,10 +17,8 @@ export class GeolocationService {
    */
   public getGeolocationIp(ipAddress?: string) {
     let url = this.url + '?apiKey=' + this.apiKey;
-    if (ipAddress) {
-      console.log('getGeolocationIp ipAddress');
-
-      url = url + '?' + ipAddress;
+    if (ipAddress && ipAddress != '') {
+      url = url + '&ipAddress=' + ipAddress;
     }
     return this.httpClient.get(url);
   }
