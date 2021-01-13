@@ -1,0 +1,43 @@
+<div class="container">
+  <section class="banner">
+    <h2>IP Address Tracker</h2>
+    <div class="input-group center">
+      <input
+        name="ipInput"
+        type="text"
+        class="form-control"
+        aria-label="Search for any IP address or domain"
+        placeholder="Search for any IP address or domain"
+        [(ngModel)]="ipInput"
+      />
+      <div class="input-group-append">
+        <span class="input-group-text" (click)="searchGeolocation()">
+          <img src="./assets/icon-arrow.svg" alt="" />
+        </span>
+      </div>
+    </div>
+  </section>
+  <section class="information" *ngIf="data">
+    <div class="row">
+      <div class="col-12 col-md-3">
+        <span class="small">IP ADDRESS</span>
+        <p>{{ data.ip }}</p>
+      </div>
+      <div class="col-12 col-md-3">
+        <span class="small">LOCATION</span>
+        <p>{{ data.location.region }}, {{ data.location.country }}</p>
+      </div>
+      <div class="col-12 col-md-3">
+        <span class="small">TIMEZONE</span>
+        <p>{{ data.location.timezone }}</p>
+      </div>
+      <div class="col-12 col-md-3">
+        <span class="small">ISP</span>
+        <p>{{ data.isp }}</p>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div id="map"></div>
+  </section>
+</div>
